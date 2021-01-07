@@ -2,40 +2,67 @@ import React from 'react'
 
 class Carrinho extends React.Component {
     state={
+        quantidade: 4,
         listaDeCompras: [{
-            quantidade: "3",
-            produto: "Item E",
-            id: "15165151",
-            preco: 15.00
+            produto:"Item A",
+            preco: 5,
+            key: 150
+        },
+        {
+            produto:"Item B",
+            preco: 10,
+            key: 160
+        },
+        {
+            produto:"Item E",
+            preco: 5,
+            key: 170
+        },
+        {
+            produto:"Item D",
+            preco: 10,
+            key: 180
+        },
+        {
+            produto:"Item C",
+            preco: 10,
+            key: 190
         }],
-        precoTotal: 5
+
     }
 
-    onClickEliminar = (e) => {
-        console.log(this.state.quantidade)
+    onClickElimina = (chave) => {
 
-        let novaListaDeCompras = this.state.listaDeCompras.splice(e.target, 1)
-
-        this.setState({listaDeCompras: novaListaDeCompras})
-    }
-
-    somaTotal = () => {
-        this.state.listaDeCompras.map((item) => {
-
-            this.setState({precoTotal: this.state.precoTotal+item.preco})  
+       let novaLista = this.state.listaDeCompras.filter((item) => {
+        return chave !== item.key
         })
-      
+
+        this.setState({listaDeCompras: novaLista})
     }
 
     render() {
+        let precoTotal = 0
+
+            this.state.listaDeCompras.map((item) => {
+                 precoTotal += item.preco
+            })
+
+
+            let produto = this.state.listaDeCompras.map((item) => {
+                return (
+                    <div>
+                        <p>{this.state.quantidade} x {item.produto}</p>
+                        <p onClick={() => this.onClickElimina(item.key)} className="elimina">X</p>
+                    </div>
+                )
+           })
+
+
         return (
             <div>
                 <h3>Carrinho:</h3>
-                <div>
-                    <p>{this.state.quantidade} x {this.state.quantidade}</p>
-                    <p onClick={this.onClickElimina} className="elimina">X</p>
-                </div>
-                <p>Total: R${this.state.precoTotal}</p>
+                {produto}
+                <p>Total: R${precoTotal}</p>
             </div>
         )
     }
