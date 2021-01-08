@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { FilterField } from "./components/Filter/FilterField";
 import { ProductsField } from "./components/Products/ProductsField";
-import { CartField } from "./components/Cart/CartField";
+// import { CartField } from "./components/Cart/CartField";
+import { Carrinho } from "./components/Cart/Carrinho";
 
 const AppWrapper = styled.main`
   display: flex;
@@ -40,7 +41,39 @@ export default class App extends React.Component {
         imageUrl: "https://picsum.photos/201/200",
       },
     ],
-    cart: [],
+    cart: [
+      {
+        name: "Item A",
+        value: 5,
+        id: 1,
+        quantity: 1,
+      },
+      {
+        name: "Item B",
+        value: 10,
+        id: 160,
+        quantity: 3,
+      },
+      {
+        name: "Item E",
+        value: 5,
+        id: 170,
+        quantity: 5,
+      },
+      {
+        name: "Item D",
+        value: 10,
+        id: 180,
+        quantity: 3,
+      },
+      {
+        name: "Item C",
+        value: 10,
+        id: 190,
+        quantity: 5,
+      },
+    ],
+    totalValue: "",
     selectedOrder: "",
     isCartVisible: false,
     filter: {
@@ -89,20 +122,33 @@ export default class App extends React.Component {
 
   // FUNÇÕES DO CARRINHO ------------------------------------------
   addToCart = (product) => {
-    const { products, cart } = this.state;
-    const cartArray = [...cart]
-    const newItem = [
-      { id: product.id, name: product.name, value: product.value, quantity: 1 },
-    ];
-    cartArray.push(newItem);
-    console.log(this.state.cart);
-    // const {products} = this.state
-    // const cartItem = products.filter((product) => {
-    //   if(product) {
-    //     return product.name
-    //   }
-    // })
-    // console.log(cartItem);
+    const newCart = this.state.cart.map((item) => {
+      if (product.id === item.id) {
+        const newItem = { ...item, quantity: item.quantity +1 };
+        return newItem;
+      } else {
+        return item;
+      }
+    });
+    this.setState({cart: newCart})
+    
+    // const { cart } = this.state;
+    // const newItem = {
+    //   id: product.id,
+    //   name: product.name,
+    //   value: product.value,
+    //   quantity: 1,
+    // };
+    // cart.push(newItem);
+    // this.setState({ cart: this.state.cart, newItem });
+  };
+
+  onClickElimina = (chave) => {
+    let novaLista = this.state.cart.filter((item) => {
+      return chave !== item.id;
+    });
+
+    this.setState({ cart: novaLista });
   };
 
   // FUNÇÃO DE RENDERIZAÇÃO DO QUE FOR FILTRADO
@@ -114,10 +160,17 @@ export default class App extends React.Component {
   };
 
   render() {
+    console.log(this.state.cart);
     // RENDERIZA O QUE FOR FILTRADO
     const renderProducts = this.filteredProducts();
     // ORDENA O QUE FOI RENDERIZADO E RENDERIZA
     const orderedProducts = renderProducts.sort(this.sortProducts);
+
+    let valueTotal = 0;
+
+    this.state.cart.map((item) => {
+      valueTotal += item.value;
+    });
 
     return (
       <AppWrapper>
@@ -132,7 +185,17 @@ export default class App extends React.Component {
           orderedProducts={orderedProducts}
           addToCart={this.addToCart}
         />
-        {this.state.isCartVisible && <CartField />}
+        {this.state.isCartVisible && (
+          <Carrinho
+            cart={this.state.cart}
+            onClickElimina={this.onClickElimina}
+            valueTotal={valueTotal}
+          />
+          // <CartField
+          //   item={this.state.cart.name}
+          //   qtde={this.state.cart.quantity}
+          // />
+        )}
         <button onClick={this.cartToggle}>Carrinho</button>
       </AppWrapper>
     );

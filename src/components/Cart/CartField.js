@@ -7,11 +7,11 @@ const CartContainer = styled.section`
   width: 200px;
 `;
 
-export const CartField = () => {
+export const CartField = (props) => {
     return (
       <CartContainer>
         <h3>Carrinho</h3>
-        <p>x</p>
+        <p>{props.qtde}x {props.item}</p>
       </CartContainer>
     );
 }
