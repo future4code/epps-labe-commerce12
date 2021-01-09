@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Filtro} from "./components/Filter/Filtro";
 import { ProductsField } from "./components/Products/ProductsField";
 // import { CartField } from "./components/Cart/CartField";
-import { Carrinho } from "./components/Cart/Carrinho";
+import { Cart } from "./components/Cart/Cart";
 
 const AppWrapper = styled.main`
   display: flex;
@@ -31,48 +31,17 @@ export default class App extends React.Component {
       {
         id: 2,
         name: "item B",
-        value: 30.5,
+        value: 20.0,
         imageUrl: "https://picsum.photos/200/201",
       },
       {
         id: 3,
         name: "item C",
-        value: 25.62,
+        value: 30.0,
         imageUrl: "https://picsum.photos/201/200",
       },
     ],
-    cart: [
-      {
-        name: "Item A",
-        value: 5,
-        id: 1,
-        quantity: 1,
-      },
-      {
-        name: "Item B",
-        value: 10,
-        id: 160,
-        quantity: 3,
-      },
-      {
-        name: "Item E",
-        value: 5,
-        id: 170,
-        quantity: 5,
-      },
-      {
-        name: "Item D",
-        value: 10,
-        id: 180,
-        quantity: 3,
-      },
-      {
-        name: "Item C",
-        value: 10,
-        id: 190,
-        quantity: 5,
-      },
-    ],
+    cart: [],
     totalValue: "",
     selectedOrder: "",
     isCartVisible: false,
@@ -83,7 +52,7 @@ export default class App extends React.Component {
     },
   };
 
-  // ABRIR COMPONENTE DO CARRINHO
+  // ABRIR COMPONENTE DO Cart
   cartToggle = () => {
     this.setState({ isCartVisible: !this.state.isCartVisible });
   };
@@ -120,35 +89,29 @@ export default class App extends React.Component {
     });
   };
 
-  // FUNÇÕES DO CARRINHO ------------------------------------------
+  // FUNÇÕES DO Cart ------------------------------------------
   addToCart = (product) => {
-    const newCart = this.state.cart.map((item) => {
-      if (product.id === item.id) {
-        const newItem = { ...item, quantity: item.quantity +1 };
-        return newItem;
-      } else {
-        return item;
-      }
-    });
+    let newCart = [...this.state.cart]
+    const cartIndex = newCart.findIndex((item) => item.id === product.id) //procura no array newCart se existe algum item com id igual ao product.id e retorna o índice dele. Se não existir, retorna índice -1
+    if(cartIndex > -1) {
+      newCart[cartIndex].quantity += 1;
+    } else {
+      const newItem = {
+        id: product.id,
+        name: product.name,
+        value: product.value,
+        quantity: 1,
+      };
+      newCart.push(newItem);
+    }
     this.setState({cart: newCart})
-    
-    // const { cart } = this.state;
-    // const newItem = {
-    //   id: product.id,
-    //   name: product.name,
-    //   value: product.value,
-    //   quantity: 1,
-    // };
-    // cart.push(newItem);
-    // this.setState({ cart: this.state.cart, newItem });
   };
 
-  onClickElimina = (chave) => {
-    let novaLista = this.state.cart.filter((item) => {
-      return chave !== item.id;
-    });
-
-    this.setState({ cart: novaLista });
+  onClickDelete = (product) => {
+    let newCart = [...this.state.cart];
+    const cartIndex = newCart.findIndex((item) => item.id === product.id);
+    newCart.splice(cartIndex, 1)
+    this.setState({cart: newCart})
   };
 
   // FUNÇÃO DE RENDERIZAÇÃO DO QUE FOR FILTRADO
@@ -176,9 +139,8 @@ export default class App extends React.Component {
 
 
   render() {
-    console.log(this.state.cart);
     // RENDERIZA O QUE FOR FILTRADO
-    const renderProducts = this.filteredProducts();
+    const filteredProducts = this.filterProducts();
     // ORDENA O QUE FOI RENDERIZADO E RENDERIZA
     console.log("oiii", renderProducts)
     console.log("estado minValue", this.state.filter.minValue)
@@ -188,8 +150,10 @@ export default class App extends React.Component {
 
     let valueTotal = 0;
 
+    // VALOR TOTAL DO Cart
+    let totalValue = 0;
     this.state.cart.map((item) => {
-      valueTotal += item.value;
+      totalValue += item.value * item.quantity;
     });
 
     return (
@@ -200,7 +164,6 @@ export default class App extends React.Component {
           maxValue = {this.maxValue}
           minFilterValue = {this.state.filter.minValue}
           maxFilterValue = {this.state.filter.maxValue}
-          
         />
         <ProductsField
           quantity={this.state.products.length}
@@ -209,17 +172,13 @@ export default class App extends React.Component {
           addToCart={this.addToCart}
         />
         {this.state.isCartVisible && (
-          <Carrinho
+          <Cart
             cart={this.state.cart}
-            onClickElimina={this.onClickElimina}
-            valueTotal={valueTotal}
+            onClickDelete={this.onClickDelete}
+            totalValue={totalValue}
           />
-          // <CartField
-          //   item={this.state.cart.name}
-          //   qtde={this.state.cart.quantity}
-          // />
         )}
-        <button onClick={this.cartToggle}>Carrinho</button>
+        <button onClick={this.cartToggle}>Cart</button>
       </AppWrapper>
     );
   }
