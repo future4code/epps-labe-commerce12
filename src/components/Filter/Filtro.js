@@ -1,51 +1,28 @@
 import React from "react";
-import { ProdutoBox } from "./ProdutoBox";
-import { StyledContainer } from "./styled";
+import { FilterContainer } from "./FilterField";
 
 export class Filtro extends React.Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-          pesquisaNome: '',
-          valorMinimo: 0,
-          valorMaximo: Infinity,
-      };
-  }
-
-  pesquisar = (event) => {
-      this.setState({ pesquisaNome: event.target.value });
-  };
-
-  minValue = (event) => {
-      this.setState({ MenorValor: Number(event.target.value) });
-  };
-
-  maxValue = (event) => {
-      this.setState({ MaiorValor: Number(event.target.value) });
-  };
+  
+  
 
   render() {
       return (
           <>
-              <StyledContainer>
+              <FilterContainer>
                   
                   <label> Valor mínimo</label>
-                  <input onChange={this.minValue} type="number" min={0} />
+                  <input onChange={(event) => this.props.minValue(event)} type="number" min={0} value={this.props.minFilterValue} />
                   <label> Valor máximo</label>
-                  <input
-                      onChange={this.maxValue}
-                      type="number"
-                      min={this.state.MenorValue}
-                  />
-                  <label> Busca por Nome</label>
-                  <input onChange={this.pesquisar} type="text" />
-              </StyledContainer>
+                  <input onChange={(event) => this.props.maxValue(event)} type="number" value={this.props.maxFilterValue}/>
+                  <label> Busca por nome</label>
+                  <input onChange={(event) => this.props.pesquisar(event)} type="text" />
+              </FilterContainer>
 
-              <ProdutoBox
-                  Parameters={this.state.pesquisaNome}
-                  valMax={this.state.MaiorValor}
-                  valMin={this.state.MenorValue}
-              />
+              
+                  {/* Buscar={this.state.pesquisaNome}
+                  valMax={this.state.valorMinimo}
+                  valMin={this.state.valorMaximo} */}
+              
           </>
       );
   }

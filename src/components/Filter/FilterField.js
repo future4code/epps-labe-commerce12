@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const FilterContainer = styled.section`
+export const FilterContainer = styled.section`
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -40,3 +40,4 @@ export const FilterField = (props) => {
     </FilterContainer>
   );
 }
+
