@@ -1,15 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { FilterField } from "./components/Filter/FilterField";
+import { Filter } from "./components/Filter/Filter";
 import { ProductsField } from "./components/Products/ProductsField";
-// import { CartField } from "./components/Cart/CartField";
-import { Carrinho } from "./components/Cart/Carrinho";
+import { Cart } from "./components/Cart/Cart";
 
 const AppWrapper = styled.main`
   display: flex;
   width: 100vw;
   height: 100vh;
-
   > button {
     position: absolute;
     bottom: 30px;
@@ -24,7 +22,7 @@ export default class App extends React.Component {
     products: [
       {
         id: 1,
-        name: "item A",
+        name: "viagem",
         value: 10.0,
         imageUrl: "https://picsum.photos/200/200",
       },
@@ -38,36 +36,88 @@ export default class App extends React.Component {
         id: 3,
         name: "item C",
         value: 30.0,
+        imageUrl: "https://picsum.photos/201/202",
+      },
+      {
+        id: 4,
+        name: "item D",
+        value: 40.0,
+        imageUrl: "https://picsum.photos/201/203",
+      },
+      {
+        id: 5,
+        name: "item E",
+        value: 50.0,
         imageUrl: "https://picsum.photos/201/200",
+      },
+      {
+        id: 6,
+        name: "item F",
+        value: 60.0,
+        imageUrl: "https://picsum.photos/202/200",
+      },
+      {
+        id: 7,
+        name: "item G",
+        value: 70.0,
+        imageUrl: "https://picsum.photos/203/200",
+      },
+      {
+        id: 8,
+        name: "item H",
+        value: 80.0,
+        imageUrl: "https://picsum.photos/201/201",
       },
     ],
     cart: [],
     totalValue: "",
     selectedOrder: "",
     isCartVisible: false,
-    filters: {
-      minValue: null,
-      maxValue: null,
-      filteredName: "",
+    filterData: {
+      minValue: -Infinity,
+      maxValue: Infinity,
+      searchName: "",
     },
   };
 
-  // ABRIR COMPONENTE DO CARRINHO
+  // LOCAL STORAGE
+  componentDidUpdate() {
+    localStorage.setItem("cartData", JSON.stringify(this.state.cart));
+  }
+
+  componentDidMount() {
+    const cartArray = JSON.parse(localStorage.getItem("cartData")) || [];
+    this.setState({ cart: cartArray });
+  }
+
+  // ABRIR COMPONENTE DO Cart
   cartToggle = () => {
     this.setState({ isCartVisible: !this.state.isCartVisible });
   };
 
   // FUNÇÕES DO FILTRO ------------------------------------------
-  changeMinValueFilter = (event) => {
-    this.setState({ filters: { minValue: event.target.value } });
+  minValue = (event) => {
+    this.setState({
+      filterData: {
+        ...this.state.filterData,
+        minValue: Number(event.target.value),
+      },
+    });
   };
 
-  changeMaxValueFilter = (event) => {
-    this.setState({ filters: { maxValue: event.target.value } });
+  maxValue = (event) => {
+    this.setState({
+      filterData: {
+        ...this.state.filterData,
+        maxValue: Number(event.target.value),
+      },
+    });
   };
 
-  changeFilteredName = (event) => {
-    this.setState({ filters: { filteredName: event.target.value } });
+  changeSearchName = (event) => {
+    this.setState({
+      filterData: { ...this.state.filterData, searchName: event.target.value },
+    });
   };
 
   // FUNCÇÕES DA ÁREA DO PRODUTO ------------------------------------------
@@ -91,9 +141,9 @@ export default class App extends React.Component {
 
   // FUNÇÕES DO CARRINHO ------------------------------------------
   addToCart = (product) => {
-    let newCart = [...this.state.cart]
-    const cartIndex = newCart.findIndex((item) => item.id === product.id) //procura no array newCart se existe algum item com id igual ao product.id e retorna o índice dele. Se não existir, retorna índice -1
-    if(cartIndex > -1) {
+    let newCart = [...this.state.cart];
+    const cartIndex = newCart.findIndex((item) => item.id === product.id); //procura no array newCart se existe algum item com id igual ao product.id e retorna o índice dele. Se não existir, retorna índice -1
+    if (cartIndex > -1) {
       newCart[cartIndex].quantity += 1;
     } else {
       const newItem = {
@@ -104,29 +154,30 @@ export default class App extends React.Component {
       };
       newCart.push(newItem);
     }
-    this.setState({cart: newCart})
+    this.setState({ cart: newCart });
   };
 
   onClickDelete = (product) => {
     let newCart = [...this.state.cart];
     const cartIndex = newCart.findIndex((item) => item.id === product.id);
-    newCart.splice(cartIndex, 1)
-    this.setState({cart: newCart})
+    newCart.splice(cartIndex, 1);
+    this.setState({ cart: newCart });
   };
 
   // FUNÇÃO DE RENDERIZAÇÃO DO QUE FOR FILTRADO
   filterProducts = () => {
-    const { products, filters } = this.state;
-    const filteredProducts = products.filter((product) => {
-      if (filters.minValue !== 0) {
-        return product.value > filters.minValue;
-      } else if (filters.maxvalue !== 0) {
-        return product.value < filters.maxValue;
-      } else {
-        return product;
-      }
-    });
-    return filteredProducts;
+    const { products } = this.state;
+    let filteredItemsByName = products.filter((item) =>
+      item.name.includes(this.state.filterData.searchName)
+    );
+    let filteredItemsByMinValue = filteredItemsByName.filter(
+      (item) => item.value >= this.state.filterData.minValue
+    );
+    let filteredItemsByMaxValue = filteredItemsByMinValue.filter(
+      (item) => item.value < this.state.filterData.maxValue
+    );
+
+    return filteredItemsByMaxValue;
   };
 
   render() {
@@ -143,11 +194,13 @@ export default class App extends React.Component {
 
     return (
       <AppWrapper>
-        <button onClick={this.cartTotalValue}>Teste</button>
-        <FilterField
-          onChangeMinValue={this.changeMinValueFilter}
-          onChangeMaxValue={this.changeMaxValueFilter}
-          onChangeFilteredName={this.changeFilteredName}
+        <Filter
+          changeSearchName={this.changeSearchName}
+          minValue={this.minValue}
+          maxValue={this.maxValue}
+          minFilterValue={this.state.filterData.minValue}
+          maxFilterValue={this.state.filterData.maxValue}
+          cleanFilter={this.cleanFilter}
         />
         <ProductsField
           quantity={this.state.products.length}
@@ -156,13 +209,13 @@ export default class App extends React.Component {
           addToCart={this.addToCart}
         />
         {this.state.isCartVisible && (
-          <Carrinho
+          <Cart
             cart={this.state.cart}
-            onClickElimina={this.onClickElimina}
+            onClickDelete={this.onClickDelete}
             totalValue={totalValue}
           />
         )}
-        <button onClick={this.cartToggle}>Carrinho</button>
+        <button onClick={this.cartToggle}>Cart</button>
       </AppWrapper>
     );
   }

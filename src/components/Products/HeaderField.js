@@ -4,6 +4,7 @@ import styled from "styled-components";
 const ProductHeader = styled.section`
   display: flex;
   justify-content: space-between;
+  padding: 10px;
 `;
 
 export const HeaderField = (props) => {
