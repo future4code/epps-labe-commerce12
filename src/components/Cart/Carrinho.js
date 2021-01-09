@@ -1,38 +1,43 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledContainer = styled.div`
+const CartContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 10vw;
+  width: 20vw;
   min-width: 100px;
   border: 1px solid black;
   padding: 10px;
 `;
 
-const ItemCarrinho = styled.div`
+const CartItem = styled.div`
   border-bottom: 1px dashed black;
+  display: flex;
+  justify-content: space-between;
 `;
-export function Carrinho(props) {
 
+export function Carrinho(props) {
   let name = props.cart.map((item) => {
     return (
-      <ItemCarrinho>
+      <CartItem>
         <p>
-          {item.quantity} x {item.name}
+          {item.quantity}x {item.name}
         </p>
-        <p onClick={() => props.onClickElimina(item.id)} className="elimina">
+        <p
+          onClick={() => props.onClickElimina(item.id)}
+          className="elimina"
+        >
           X
         </p>
-      </ItemCarrinho>
+      </CartItem>
     );
   });
 
   return (
-    <StyledContainer>
+    <CartContainer>
       <h3>Carrinho:</h3>
       {name}
-      <p>Total: R${props.valueTotal}</p>
-    </StyledContainer>
+      <p>Total: R${props.totalValue}</p>
+    </CartContainer>
   );
 }

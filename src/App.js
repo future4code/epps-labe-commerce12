@@ -31,52 +31,21 @@ export default class App extends React.Component {
       {
         id: 2,
         name: "item B",
-        value: 30.5,
+        value: 20.0,
         imageUrl: "https://picsum.photos/200/201",
       },
       {
         id: 3,
         name: "item C",
-        value: 25.62,
+        value: 30.0,
         imageUrl: "https://picsum.photos/201/200",
       },
     ],
-    cart: [
-      {
-        name: "Item A",
-        value: 5,
-        id: 1,
-        quantity: 1,
-      },
-      {
-        name: "Item B",
-        value: 10,
-        id: 160,
-        quantity: 3,
-      },
-      {
-        name: "Item E",
-        value: 5,
-        id: 170,
-        quantity: 5,
-      },
-      {
-        name: "Item D",
-        value: 10,
-        id: 180,
-        quantity: 3,
-      },
-      {
-        name: "Item C",
-        value: 10,
-        id: 190,
-        quantity: 5,
-      },
-    ],
+    cart: [],
     totalValue: "",
     selectedOrder: "",
     isCartVisible: false,
-    filter: {
+    filters: {
       minValue: null,
       maxValue: null,
       filteredName: "",
@@ -90,15 +59,15 @@ export default class App extends React.Component {
 
   // FUNÇÕES DO FILTRO ------------------------------------------
   changeMinValueFilter = (event) => {
-    this.setState({ filter: { minValue: event.target.value } });
+    this.setState({ filters: { minValue: event.target.value } });
   };
 
   changeMaxValueFilter = (event) => {
-    this.setState({ filter: { maxValue: event.target.value } });
+    this.setState({ filters: { maxValue: event.target.value } });
   };
 
   changeFilteredName = (event) => {
-    this.setState({ filter: { filteredName: event.target.value } });
+    this.setState({ filters: { filteredName: event.target.value } });
   };
 
   // FUNCÇÕES DA ÁREA DO PRODUTO ------------------------------------------
@@ -122,58 +91,59 @@ export default class App extends React.Component {
 
   // FUNÇÕES DO CARRINHO ------------------------------------------
   addToCart = (product) => {
-    const newCart = this.state.cart.map((item) => {
-      if (product.id === item.id) {
-        const newItem = { ...item, quantity: item.quantity +1 };
-        return newItem;
-      } else {
-        return item;
-      }
-    });
+    let newCart = [...this.state.cart]
+    const cartIndex = newCart.findIndex((item) => item.id === product.id) //procura no array newCart se existe algum item com id igual ao product.id e retorna o índice dele. Se não existir, retorna índice -1
+    if(cartIndex > -1) {
+      newCart[cartIndex].quantity += 1;
+    } else {
+      const newItem = {
+        id: product.id,
+        name: product.name,
+        value: product.value,
+        quantity: 1,
+      };
+      newCart.push(newItem);
+    }
     this.setState({cart: newCart})
-    
-    // const { cart } = this.state;
-    // const newItem = {
-    //   id: product.id,
-    //   name: product.name,
-    //   value: product.value,
-    //   quantity: 1,
-    // };
-    // cart.push(newItem);
-    // this.setState({ cart: this.state.cart, newItem });
   };
 
-  onClickElimina = (chave) => {
-    let novaLista = this.state.cart.filter((item) => {
-      return chave !== item.id;
-    });
-
-    this.setState({ cart: novaLista });
+  onClickDelete = (product) => {
+    let newCart = [...this.state.cart];
+    const cartIndex = newCart.findIndex((item) => item.id === product.id);
+    newCart.splice(cartIndex, 1)
+    this.setState({cart: newCart})
   };
 
   // FUNÇÃO DE RENDERIZAÇÃO DO QUE FOR FILTRADO
-  filteredProducts = () => {
-    const { products } = this.state;
-    let filteredItems = products;
-    // CRIAR FUNÇÃO AQUI----------------------------------
-    return filteredItems;
+  filterProducts = () => {
+    const { products, filters } = this.state;
+    const filteredProducts = products.filter((product) => {
+      if (filters.minValue !== 0) {
+        return product.value > filters.minValue;
+      } else if (filters.maxvalue !== 0) {
+        return product.value < filters.maxValue;
+      } else {
+        return product;
+      }
+    });
+    return filteredProducts;
   };
 
   render() {
-    console.log(this.state.cart);
     // RENDERIZA O QUE FOR FILTRADO
-    const renderProducts = this.filteredProducts();
+    const filteredProducts = this.filterProducts();
     // ORDENA O QUE FOI RENDERIZADO E RENDERIZA
-    const orderedProducts = renderProducts.sort(this.sortProducts);
+    const orderedProducts = filteredProducts.sort(this.sortProducts);
 
-    let valueTotal = 0;
-
+    // VALOR TOTAL DO CARRINHO
+    let totalValue = 0;
     this.state.cart.map((item) => {
-      valueTotal += item.value;
+      totalValue += item.value * item.quantity;
     });
 
     return (
       <AppWrapper>
+        <button onClick={this.cartTotalValue}>Teste</button>
         <FilterField
           onChangeMinValue={this.changeMinValueFilter}
           onChangeMaxValue={this.changeMaxValueFilter}
@@ -189,12 +159,8 @@ export default class App extends React.Component {
           <Carrinho
             cart={this.state.cart}
             onClickElimina={this.onClickElimina}
-            valueTotal={valueTotal}
+            totalValue={totalValue}
           />
-          // <CartField
-          //   item={this.state.cart.name}
-          //   qtde={this.state.cart.quantity}
-          // />
         )}
         <button onClick={this.cartToggle}>Carrinho</button>
       </AppWrapper>
