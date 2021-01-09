@@ -107,7 +107,7 @@ export default class App extends React.Component {
     this.setState({cart: newCart})
   };
 
-  onClickElimina = (product) => {
+  onClickDelete = (product) => {
     let newCart = [...this.state.cart];
     const cartIndex = newCart.findIndex((item) => item.id === product.id);
     newCart.splice(cartIndex, 1)
@@ -117,7 +117,7 @@ export default class App extends React.Component {
   // FUNÇÃO DE RENDERIZAÇÃO DO QUE FOR FILTRADO
   filterProducts = () => {
     const { products, filters } = this.state;
-    const filteredItems = products.filter((product) => {
+    const filteredProducts = products.filter((product) => {
       if (filters.minValue !== 0) {
         return product.value > filters.minValue;
       } else if (filters.maxvalue !== 0) {
@@ -126,15 +126,14 @@ export default class App extends React.Component {
         return product;
       }
     });
-    return filteredItems;
+    return filteredProducts;
   };
 
   render() {
-    console.log(this.state.cart)
     // RENDERIZA O QUE FOR FILTRADO
-    const filteredItems = this.filterProducts();
+    const filteredProducts = this.filterProducts();
     // ORDENA O QUE FOI RENDERIZADO E RENDERIZA
-    const orderedProducts = filteredItems.sort(this.sortProducts);
+    const orderedProducts = filteredProducts.sort(this.sortProducts);
 
     // VALOR TOTAL DO CARRINHO
     let totalValue = 0;
@@ -162,10 +161,6 @@ export default class App extends React.Component {
             onClickElimina={this.onClickElimina}
             totalValue={totalValue}
           />
-          // <CartField
-          //   item={this.state.cart.name}
-          //   qtde={this.state.cart.quantity}
-          // />
         )}
         <button onClick={this.cartToggle}>Carrinho</button>
       </AppWrapper>
