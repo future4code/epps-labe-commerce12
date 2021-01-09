@@ -5,7 +5,7 @@ const CartContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 20vw;
-  min-width: 100px;
+  min-width: 150px;
   border: 1px solid black;
   padding: 10px;
 `;
@@ -35,7 +35,7 @@ export function Cart(props) {
 
   return (
     <CartContainer>
-      <h3>Cart:</h3>
+      <h3>Carrinho:</h3>
       {name}
       <p>Total: R${props.totalValue}</p>
     </CartContainer>

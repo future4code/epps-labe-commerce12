@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Filtro} from "./components/Filter/Filtro";
+import { Filter } from "./components/Filter/Filter";
 import { ProductsField } from "./components/Products/ProductsField";
-// import { CartField } from "./components/Cart/CartField";
 import { Cart } from "./components/Cart/Cart";
 
 const AppWrapper = styled.main`
@@ -38,14 +37,44 @@ export default class App extends React.Component {
         id: 3,
         name: "item C",
         value: 30.0,
+        imageUrl: "https://picsum.photos/201/202",
+      },
+      {
+        id: 4,
+        name: "item D",
+        value: 40.0,
+        imageUrl: "https://picsum.photos/201/203",
+      },
+      {
+        id: 5,
+        name: "item E",
+        value: 50.0,
         imageUrl: "https://picsum.photos/201/200",
+      },
+      {
+        id: 6,
+        name: "item F",
+        value: 60.0,
+        imageUrl: "https://picsum.photos/202/200",
+      },
+      {
+        id: 7,
+        name: "item G",
+        value: 70.0,
+        imageUrl: "https://picsum.photos/203/200",
+      },
+      {
+        id: 8,
+        name: "item H",
+        value: 80.0,
+        imageUrl: "https://picsum.photos/201/201",
       },
     ],
     cart: [],
     totalValue: "",
     selectedOrder: "",
     isCartVisible: false,
-    filter: {
+    filterData: {
       minValue: -Infinity,
       maxValue: Infinity,
       searchName: "",
@@ -58,17 +87,29 @@ export default class App extends React.Component {
   };
 
   // FUNÇÕES DO FILTRO ------------------------------------------
-  // changeMinValueFilter = (event) => {
-  //   this.setState({ filter: { minValue: event.target.value } });
-  // };
+  minValue = (event) => {
+    this.setState({
+      filterData: {
+        ...this.state.filterData,
+        minValue: Number(event.target.value),
+      },
+    });
+  };
 
-  // changeMaxValueFilter = (event) => {
-  //   this.setState({ filter: { maxValue: event.target.value } });
-  // };
+  maxValue = (event) => {
+    this.setState({
+      filterData: {
+        ...this.state.filterData,
+        maxValue: Number(event.target.value),
+      },
+    });
+  };
 
-  // changeFilteredName = (event) => {
-  //   this.setState({ filter: { filteredName: event.target.value } });
-  // };
+  changeSearchName = (event) => {
+    this.setState({
+      filterData: { ...this.state.filterData, searchName: event.target.value },
+    });
+  };
 
   // FUNCÇÕES DA ÁREA DO PRODUTO ------------------------------------------
   // FUNÇÃO PARA ORDERNAR LISTA
@@ -91,9 +132,9 @@ export default class App extends React.Component {
 
   // FUNÇÕES DO Cart ------------------------------------------
   addToCart = (product) => {
-    let newCart = [...this.state.cart]
-    const cartIndex = newCart.findIndex((item) => item.id === product.id) //procura no array newCart se existe algum item com id igual ao product.id e retorna o índice dele. Se não existir, retorna índice -1
-    if(cartIndex > -1) {
+    let newCart = [...this.state.cart];
+    const cartIndex = newCart.findIndex((item) => item.id === product.id); //procura no array newCart se existe algum item com id igual ao product.id e retorna o índice dele. Se não existir, retorna índice -1
+    if (cartIndex > -1) {
       newCart[cartIndex].quantity += 1;
     } else {
       const newItem = {
@@ -104,51 +145,37 @@ export default class App extends React.Component {
       };
       newCart.push(newItem);
     }
-    this.setState({cart: newCart})
+    this.setState({ cart: newCart });
   };
 
   onClickDelete = (product) => {
     let newCart = [...this.state.cart];
     const cartIndex = newCart.findIndex((item) => item.id === product.id);
-    newCart.splice(cartIndex, 1)
-    this.setState({cart: newCart})
+    newCart.splice(cartIndex, 1);
+    this.setState({ cart: newCart });
   };
 
   // FUNÇÃO DE RENDERIZAÇÃO DO QUE FOR FILTRADO
-  filteredProducts = () => {
+  filterProducts = () => {
     const { products } = this.state;
-    let filteredItemsByName = products.filter(item => item.name.includes(this.state.filter.searchName))
-    let filteredItemsByMinValue = filteredItemsByName.filter(item => item.value >= this.state.filter.minValue)
-    let filteredItemsByMaxValue = filteredItemsByMinValue.filter(item => item.value < this.state.filter.maxValue)
-    
+    let filteredItemsByName = products.filter((item) =>
+      item.name.includes(this.state.filterData.searchName)
+    );
+    let filteredItemsByMinValue = filteredItemsByName.filter(
+      (item) => item.value >= this.state.filterData.minValue
+    );
+    let filteredItemsByMaxValue = filteredItemsByMinValue.filter(
+      (item) => item.value < this.state.filterData.maxValue
+    );
+
     return filteredItemsByMaxValue;
-  
   };
-
-  minValue = (event) => {
-    this.setState({ filter: { ...this.state.filter, minValue: Number(event.target.value) }});
-  };
-
-  maxValue = (event) => {
-    this.setState({ filter: { ...this.state.filter, maxValue: Number(event.target.value) }});
-  };
-
-  pesquisar = (event) => {
-    this.setState({ filter : { ...this.state.filter, searchName: event.target.value }});
-  };
-
 
   render() {
     // RENDERIZA O QUE FOR FILTRADO
     const filteredProducts = this.filterProducts();
     // ORDENA O QUE FOI RENDERIZADO E RENDERIZA
-    console.log("oiii", renderProducts)
-    console.log("estado minValue", this.state.filter.minValue)
-    console.log("estado searchName", this.state.filter.searchName)
-    console.log("estado maxValue", this.state.filter.maxValue)
-    const orderedProducts = renderProducts.sort(this.sortProducts);
-
-    let valueTotal = 0;
+    const orderedProducts = filteredProducts.sort(this.sortProducts);
 
     // VALOR TOTAL DO Cart
     let totalValue = 0;
@@ -158,12 +185,13 @@ export default class App extends React.Component {
 
     return (
       <AppWrapper>
-        <Filtro
-          pesquisar = {this.pesquisar}
-          minValue = {this.minValue}
-          maxValue = {this.maxValue}
-          minFilterValue = {this.state.filter.minValue}
-          maxFilterValue = {this.state.filter.maxValue}
+        <Filter
+          changeSearchName={this.changeSearchName}
+          minValue={this.minValue}
+          maxValue={this.maxValue}
+          minFilterValue={this.state.filterData.minValue}
+          maxFilterValue={this.state.filterData.maxValue}
+          cleanFilter={this.cleanFilter}
         />
         <ProductsField
           quantity={this.state.products.length}
