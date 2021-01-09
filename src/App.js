@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FilterField } from "./components/Filter/FilterField";
 import { ProductsField } from "./components/Products/ProductsField";
 // import { CartField } from "./components/Cart/CartField";
-import { Carrinho } from "./components/Cart/Carrinho";
+import { Cart } from "./components/Cart/Cart";
 
 const AppWrapper = styled.main`
   display: flex;
@@ -52,7 +52,7 @@ export default class App extends React.Component {
     },
   };
 
-  // ABRIR COMPONENTE DO CARRINHO
+  // ABRIR COMPONENTE DO Cart
   cartToggle = () => {
     this.setState({ isCartVisible: !this.state.isCartVisible });
   };
@@ -89,7 +89,7 @@ export default class App extends React.Component {
     });
   };
 
-  // FUNÇÕES DO CARRINHO ------------------------------------------
+  // FUNÇÕES DO Cart ------------------------------------------
   addToCart = (product) => {
     let newCart = [...this.state.cart]
     const cartIndex = newCart.findIndex((item) => item.id === product.id) //procura no array newCart se existe algum item com id igual ao product.id e retorna o índice dele. Se não existir, retorna índice -1
@@ -135,7 +135,7 @@ export default class App extends React.Component {
     // ORDENA O QUE FOI RENDERIZADO E RENDERIZA
     const orderedProducts = filteredProducts.sort(this.sortProducts);
 
-    // VALOR TOTAL DO CARRINHO
+    // VALOR TOTAL DO Cart
     let totalValue = 0;
     this.state.cart.map((item) => {
       totalValue += item.value * item.quantity;
@@ -156,13 +156,13 @@ export default class App extends React.Component {
           addToCart={this.addToCart}
         />
         {this.state.isCartVisible && (
-          <Carrinho
+          <Cart
             cart={this.state.cart}
-            onClickElimina={this.onClickElimina}
+            onClickDelete={this.onClickDelete}
             totalValue={totalValue}
           />
         )}
-        <button onClick={this.cartToggle}>Carrinho</button>
+        <button onClick={this.cartToggle}>Cart</button>
       </AppWrapper>
     );
   }

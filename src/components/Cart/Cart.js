@@ -16,7 +16,7 @@ const CartItem = styled.div`
   justify-content: space-between;
 `;
 
-export function Carrinho(props) {
+export function Cart(props) {
   let name = props.cart.map((item) => {
     return (
       <CartItem>
@@ -24,7 +24,7 @@ export function Carrinho(props) {
           {item.quantity}x {item.name}
         </p>
         <p
-          onClick={() => props.onClickElimina(item.id)}
+          onClick={() => props.onClickDelete(item.id)}
           className="elimina"
         >
           X
@@ -35,7 +35,7 @@ export function Carrinho(props) {
 
   return (
     <CartContainer>
-      <h3>Carrinho:</h3>
+      <h3>Cart:</h3>
       {name}
       <p>Total: R${props.totalValue}</p>
     </CartContainer>
