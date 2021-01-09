@@ -14,7 +14,7 @@ export class Filtro extends React.Component {
                   <input onChange={(event) => this.props.minValue(event)} type="number" min={0} value={this.props.minFilterValue} />
                   <label> Valor máximo</label>
                   <input onChange={(event) => this.props.maxValue(event)} type="number" value={this.props.maxFilterValue}/>
-                  <label> Busca por Nome</label>
+                  <label> Busca por nome</label>
                   <input onChange={(event) => this.props.pesquisar(event)} type="text" />
               </FilterContainer>
 

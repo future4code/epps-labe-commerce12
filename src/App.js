@@ -79,7 +79,7 @@ export default class App extends React.Component {
     filter: {
       minValue: -Infinity,
       maxValue: Infinity,
-      pesquisaNome: "",
+      searchName: "",
     },
   };
 
@@ -154,16 +154,12 @@ export default class App extends React.Component {
   // FUNÇÃO DE RENDERIZAÇÃO DO QUE FOR FILTRADO
   filteredProducts = () => {
     const { products } = this.state;
-    let filteredItemsByName = products.filter(item => item.name.includes(this.state.filter.pesquisaNome))
-    let filteredItemsByMinValue = filteredItemsByName.filter(item => item.value > this.state.filter.minValue)
-    // let filteredItemsByMaxValue = filteredItemsByMinValue.filter(item => item.value < this.state.filter.maxValue)
+    let filteredItemsByName = products.filter(item => item.name.includes(this.state.filter.searchName))
+    let filteredItemsByMinValue = filteredItemsByName.filter(item => item.value >= this.state.filter.minValue)
+    let filteredItemsByMaxValue = filteredItemsByMinValue.filter(item => item.value < this.state.filter.maxValue)
     
-    return filteredItemsByMinValue;
-  };
-
+    return filteredItemsByMaxValue;
   
-  pesquisar = (event) => {
-    this.setState({ filter : { ...this.state.filter, pesquisaNome: event.target.value }});
   };
 
   minValue = (event) => {
@@ -174,6 +170,10 @@ export default class App extends React.Component {
     this.setState({ filter: { ...this.state.filter, maxValue: Number(event.target.value) }});
   };
 
+  pesquisar = (event) => {
+    this.setState({ filter : { ...this.state.filter, searchName: event.target.value }});
+  };
+
 
   render() {
     console.log(this.state.cart);
@@ -182,7 +182,7 @@ export default class App extends React.Component {
     // ORDENA O QUE FOI RENDERIZADO E RENDERIZA
     console.log("oiii", renderProducts)
     console.log("estado minValue", this.state.filter.minValue)
-    console.log("estado pesquisanome", this.state.filter.pesquisaNome)
+    console.log("estado searchName", this.state.filter.searchName)
     console.log("estado maxValue", this.state.filter.maxValue)
     const orderedProducts = renderProducts.sort(this.sortProducts);
 
