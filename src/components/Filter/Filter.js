@@ -7,6 +7,8 @@ let FilterContainer = styled.div`
   padding: 10px;
   background-color: #000000;
   color: #ffffff;
+  position: absolute;
+  top: 38px;
 
   label {
     margin-top: 10px;

@@ -5,11 +5,16 @@ import bgCart from "../../imgs/bg-cart.png";
 const CartContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 20vw;
+  width: 10vw;
   min-width: 150px;
   border: 1px solid black;
   padding: 10px;
+  background-color: #ffffff;
   background-image: url(${bgCart});
+  position: absolute;
+  right: 10px;
+  top: 55px;
+  border-radius: 15px; 
 
   h3 {
     margin-bottom: 10px;
@@ -35,7 +40,7 @@ const CartItem = styled.div`
   }
 `;
 
-export function Cart(props) {
+export const Cart = (props) => {
   let name = props.cart.map((item) => {
     return (
       <CartItem>
