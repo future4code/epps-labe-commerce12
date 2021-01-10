@@ -15,7 +15,7 @@ export const ProductItem = (props) => {
         <img src={props.imageUrl} alt="" />
         <p>{props.name}</p>
         <p>R$ {props.value}</p>
-        <button onClick={props.addToCart}>Adicionar ao carrinho</button>
+        <button onClick={props.addToCart}>Adicionar ao Carrinho</button>
       </ProductBox>
     );
 }

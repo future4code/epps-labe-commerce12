@@ -28,11 +28,9 @@ export function Cart(props) {
   let name = props.cart.map((item) => {
     return (
       <CartItem>
-        <a>
           <p>
             {item.quantity}x {item.name}
           </p>
-        </a>
         <button onClick={() => props.onClickDelete(item.id)} className="elimina">
           [ X ]
         </button>

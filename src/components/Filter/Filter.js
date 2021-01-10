@@ -5,6 +5,7 @@ const FilterContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
+
   Label {
     margin-top: 10px;
   }
