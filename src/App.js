@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Filter } from "./components/Filter/Filter";
 import { ProductsField } from "./components/Products/ProductsField";
 import { Cart } from "./components/Cart/Cart";
+import cartIcon from './imgs/cart_icon.png'
 
 const AppWrapper = styled.main`
   display: flex;
@@ -14,6 +15,17 @@ const AppWrapper = styled.main`
     right: 30px;
     width: 70px;
     height: 70px;
+  }
+  .cartIcon {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+  }
+
+  @media (min-width: 810px) and (max-width: 1367px) {
+    flex-direction: column;
   }
 `;
 
@@ -215,7 +227,7 @@ export default class App extends React.Component {
             totalValue={totalValue}
           />
         )}
-        <button onClick={this.cartToggle}>Cart</button>
+        <img className="cartIcon" src={cartIcon} onClick={this.cartToggle} />
       </AppWrapper>
     );
   }
