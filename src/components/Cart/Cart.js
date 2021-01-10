@@ -14,21 +14,26 @@ const CartItem = styled.div`
   border-bottom: 1px dashed black;
   display: flex;
   justify-content: space-between;
+
+  button {
+    padding: 3px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-weight: bold;
+  }
 `;
 
 export function Cart(props) {
   let name = props.cart.map((item) => {
     return (
       <CartItem>
-        <p>
-          {item.quantity}x {item.name}
-        </p>
-        <p
-          onClick={() => props.onClickDelete(item.id)}
-          className="elimina"
-        >
-          X
-        </p>
+          <p>
+            {item.quantity}x {item.name}
+          </p>
+        <button onClick={() => props.onClickDelete(item.id)} className="elimina">
+          [ X ]
+        </button>
       </CartItem>
     );
   });

@@ -8,7 +8,6 @@ const AppWrapper = styled.main`
   display: flex;
   width: 100vw;
   height: 100vh;
-
   > button {
     position: absolute;
     bottom: 30px;
@@ -81,7 +80,17 @@ export default class App extends React.Component {
     },
   };
 
-  // ABRIR COMPONENTE DO Cart
+  // LOCAL STORAGE ------------------------------------------
+  componentDidUpdate() {
+    localStorage.setItem("cartData", JSON.stringify(this.state.cart));
+  }
+
+  componentDidMount() {
+    const cartArray = JSON.parse(localStorage.getItem("cartData")) || [];
+    this.setState({ cart: cartArray });
+  }
+
+  // ABRIR COMPONENTE DO CARRINHO
   cartToggle = () => {
     this.setState({ isCartVisible: !this.state.isCartVisible });
   };
@@ -130,7 +139,7 @@ export default class App extends React.Component {
     });
   };
 
-  // FUNÇÕES DO Cart ------------------------------------------
+  // FUNÇÕES DO CARRINHO ------------------------------------------
   addToCart = (product) => {
     let newCart = [...this.state.cart];
     const cartIndex = newCart.findIndex((item) => item.id === product.id); //procura no array newCart se existe algum item com id igual ao product.id e retorna o índice dele. Se não existir, retorna índice -1

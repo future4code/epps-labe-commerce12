@@ -11,6 +11,7 @@ const MainContainer = styled.section`
 
 const ProductContainer = styled.section`
   display: flex;
+  flex-wrap:wrap;
   gap: 10px;
   padding: 10px;
 `;

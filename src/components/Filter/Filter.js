@@ -38,5 +38,3 @@ export const Filter = (props) => {
     </>
   );
 };
-
-// export default Filtro;
