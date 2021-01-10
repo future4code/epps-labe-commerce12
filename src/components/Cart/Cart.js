@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import bgCart from "../../imgs/bg-cart.png";
 
 const CartContainer = styled.div`
   display: flex;
@@ -8,6 +9,16 @@ const CartContainer = styled.div`
   min-width: 150px;
   border: 1px solid black;
   padding: 10px;
+  background-image: url(${bgCart});
+
+  h3 {
+    margin-bottom: 10px;
+    background-color: #ffffff;
+  }
+
+  p {
+    background-color: #ffffff;
+  }
 `;
 
 const CartItem = styled.div`
@@ -17,7 +28,7 @@ const CartItem = styled.div`
 
   button {
     padding: 3px;
-    background-color: transparent;
+    background-color: #ffffff;
     border: none;
     outline: none;
     font-weight: bold;
@@ -42,7 +53,7 @@ export function Cart(props) {
     <CartContainer>
       <h3>Carrinho:</h3>
       {name}
-      <p>Total: R${props.totalValue}</p>
+      <p>Total: R${props.totalValue.toFixed(2)}</p>
     </CartContainer>
   );
 }

@@ -7,13 +7,25 @@ const MainContainer = styled.section`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  background-repeat: repeat;
+  overflow-y: auto;
+  background-color: #000000;
 `;
 
 const ProductContainer = styled.section`
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
+  height: 100%;
   gap: 10px;
   padding: 10px;
+  background-color: #ffffff;
+  border-radius: 15px 0 0 0;
+  overflow-y: auto;
+
+  @media (max-width: 810px) {
+    justify-content: center;
+    /* border-radius: 0; */
+  }
 `;
 
 export const ProductsField = (props) => {
