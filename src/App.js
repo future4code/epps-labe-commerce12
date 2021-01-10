@@ -25,7 +25,7 @@ const AppWrapper = styled.main`
   }
 
   @media (min-width: 810px) and (max-width: 1367px) {
-    flex-direction: column;
+    /* flex-direction: column; */
   }
 `;
 
@@ -34,7 +34,7 @@ export default class App extends React.Component {
     products: [
       {
         id: 1,
-        name: "viagem",
+        name: "item A",
         value: 10.0,
         imageUrl: "https://picsum.photos/200/200",
       },

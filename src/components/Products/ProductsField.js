@@ -13,18 +13,25 @@ const MainContainer = styled.section`
 `;
 
 const ProductContainer = styled.section`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   height: 100%;
-  gap: 10px;
-  padding: 10px;
+  gap: 20px 10px;
+  padding: 24px 0 0 32px;
   background-color: #ffffff;
   border-radius: 15px 0 0 0;
   overflow-y: auto;
+  justify-items: center;
+  
 
-  @media (max-width: 810px) {
-    justify-content: center;
-    /* border-radius: 0; */
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    
+  }
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+
   }
 `;
 
