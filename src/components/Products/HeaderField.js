@@ -3,10 +3,24 @@ import styled from "styled-components";
 
 const ProductHeader = styled.section`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   padding: 10px;
   background-color: #000000;
   color: #ffffff;
+
+  p {
+    margin: 0 15px 0 130px;
+  }
+
+  @media (max-width: 409px) {
+    flex-direction: column;
+    margin-left: 120px;
+    align-items: center;
+
+    p{
+      margin: 0;
+    }
+  }
 `;
 
 export const HeaderField = (props) => {

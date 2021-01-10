@@ -10,29 +10,29 @@ const MainContainer = styled.section`
   background-repeat: repeat;
   overflow-y: auto;
   background-color: #000000;
+  align-items: center;
 `;
 
 const ProductContainer = styled.section`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* grid-template-columns: repeat(4, 1fr); */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   height: 100%;
-  gap: 20px 10px;
-  padding: 24px 0 0 32px;
+  gap: 30px;
+  padding: 20px;
   background-color: #ffffff;
-  border-radius: 15px 0 0 0;
+  border-radius: 15px 15px 0 0;
   overflow-y: auto;
   justify-items: center;
-  
+  width: 97%;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-    
+  /* @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @media (max-width: 700px) {
     grid-template-columns: 1fr;
-
-  }
+  } */
 `;
 
 export const ProductsField = (props) => {
