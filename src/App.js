@@ -92,7 +92,7 @@ export default class App extends React.Component {
     },
   };
 
-  // LOCAL STORAGE
+  // LOCAL STORAGE ------------------------------------------
   componentDidUpdate() {
     localStorage.setItem("cartData", JSON.stringify(this.state.cart));
   }
@@ -102,7 +102,7 @@ export default class App extends React.Component {
     this.setState({ cart: cartArray });
   }
 
-  // ABRIR COMPONENTE DO Cart
+  // ABRIR COMPONENTE DO CARRINHO
   cartToggle = () => {
     this.setState({ isCartVisible: !this.state.isCartVisible });
   };
@@ -198,7 +198,7 @@ export default class App extends React.Component {
     // ORDENA O QUE FOI RENDERIZADO E RENDERIZA
     const orderedProducts = filteredProducts.sort(this.sortProducts);
 
-    // VALOR TOTAL DO CARRINHO
+    // VALOR TOTAL DO Cart
     let totalValue = 0;
     this.state.cart.map((item) => {
       totalValue += item.value * item.quantity;
