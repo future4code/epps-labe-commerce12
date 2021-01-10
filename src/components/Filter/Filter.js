@@ -16,23 +16,6 @@ let FilterContainer = styled.div`
     width: 120px;
   }
 
-  @media (min-width: 810px) and (max-width: 1367px) {
-    flex-direction: row;
-    align-items: center;
-
-    label {
-      margin-top: 0;
-      margin: 0 5px;
-    }
-
-    h3 {
-      margin-right: 10px;
-    }
-  }
-
-  @media (max-width: 809px) {
-    
-  }
 `;
 
 export const Filter = (props) => {
