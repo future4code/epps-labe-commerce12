@@ -25,14 +25,6 @@ const ProductContainer = styled.section`
   overflow-y: auto;
   justify-items: center;
   width: 97%;
-
-  /* @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (max-width: 700px) {
-    grid-template-columns: 1fr;
-  } */
 `;
 
 export const ProductsField = (props) => {
