@@ -24,6 +24,18 @@ const CartContainer = styled.div`
   p {
     background-color: #ffffff;
   }
+
+  .cleanBtn {
+    background-color: #000000;
+    color: #ffffff;
+    height: 35px;
+    border-radius: 5px;
+  }
+
+  .cleanBtn:hover {
+    background-color: orange;
+    transition: ease 0.3s;
+  }
 `;
 
 const CartItem = styled.div`
@@ -42,13 +54,11 @@ const CartItem = styled.div`
 `;
 
 const DeleteBtn = styled.button`
-   {
     padding: 3px;
     background-color: #ffffff;
     border: none;
     outline: none;
     font-weight: bold;
-  }
 `;
 
 export const Cart = (props) => {
@@ -84,6 +94,7 @@ export const Cart = (props) => {
       <h3>Carrinho:</h3>
       {name}
       <p>Total: R${props.totalValue.toFixed(2)}</p>
+      <button className="cleanBtn" onClick={props.cleanCart}>Limpar carrinho</button>
     </CartContainer>
   );
 };
