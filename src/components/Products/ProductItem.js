@@ -40,7 +40,7 @@ export const ProductItem = (props) => {
         <img src={props.imageUrl} alt="" />
         <p className="product-name">{props.name}</p>
         <p>
-          <b>R$</b> {props.value}
+          <b>R$</b> {props.value.toFixed(2)}
         </p>
         <button onClick={props.addToCart}>Adicionar ao carrinho</button>
       </ProductBox>

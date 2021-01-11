@@ -22,32 +22,14 @@ const ProductHeader = styled.section`
   }
 `;
 
-export class HeaderField extends React.Component {
-
-render() {
-  console.log(this.props.Modo)
-  let Modo = <button>Modo Lojista</button>
-  if(this.props.Modo){
-    Modo = <button>Modo Lojista</button>
-    return (
-      <ProductHeader>
-        <p>Total: {this.props.quantity} itens</p>
-        <button onClick={this.props.ChangeModeStatus}>{Modo}</button>
-      </ProductHeader>
-    );
-  } else {
-    Modo = <button>Modo Cliente</button>
-    return (
-      <ProductHeader>
-        <p>Total: {this.props.quantity} itens</p>
-        <button onClick={this.props.ChangeModeStatus}>{Modo}</button>
-        <select onChange={this.props.orderType}>
-          <option value="a-z">Ordem crescente</option>
-          <option value="z-a">Ordem decrescente</option>
-        </select>
-      </ProductHeader>
-    );
-  }
-}
- 
+export const HeaderField = (props) => {
+  return (
+    <ProductHeader>
+      <p>Total: {props.quantity} itens</p>
+      <select onChange={props.orderType}>
+        <option value="a-z">Ordem crescente</option>
+        <option value="z-a">Ordem decrescente</option>
+      </select>
+    </ProductHeader>
+  );
 }

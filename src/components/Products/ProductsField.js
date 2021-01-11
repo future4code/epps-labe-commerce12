@@ -28,31 +28,23 @@ const ProductContainer = styled.section`
 `;
 
 export const ProductsField = (props) => {
-  if(!props.Modo){
-    return (
-      <MainContainer>
-        <HeaderField Modo={props.Modo} ChangeModeStatus={props.ChangeModeStatus} quantity={props.quantity} orderType={props.orderType} />
-        <ProductContainer>
-          {props.orderedProducts.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                imageUrl={product.imageUrl}
-                name={product.name}
-                value={product.value}
-                id={product.id}
-                addToCart={() => props.addToCart(product)}
-              />
-            );
-          })}
-        </ProductContainer>
-      </MainContainer>
-    );
-  } else {
-    return (
-      <MainContainer>
-        <HeaderField Modo={props.Modo} ChangeModeStatus={props.ChangeModeStatus} quantity={props.quantity} orderType={props.orderType} />
-      </MainContainer>
-    );
-  }
+  return (
+    <MainContainer>
+      <HeaderField quantity={props.quantity} orderType={props.orderType} />
+      <ProductContainer>
+        {props.orderedProducts.map((product) => {
+          return (
+            <ProductItem
+              key={product.id}
+              imageUrl={product.imageUrl}
+              name={product.name}
+              value={product.value}
+              id={product.id}
+              addToCart={() => props.addToCart(product)}
+            />
+          );
+        })}
+      </ProductContainer>
+    </MainContainer>
+  );
 }

@@ -8,13 +8,14 @@ import cartIcon from './imgs/cart_icon.png'
 const AppWrapper = styled.main`
   display: flex;
   width: 100vw;
+  min-width: 300px;
   height: 100vh;
-  > button {
+  .filterIcon {
     position: absolute;
-    bottom: 30px;
-    right: 30px;
-    width: 70px;
-    height: 70px;
+    top: 5px;
+    left: 5px;
+    padding: 5px 10px;
+    height: 30px;
   }
   .cartIcon {
     position: absolute;
@@ -23,20 +24,7 @@ const AppWrapper = styled.main`
     width: 70px;
     height: 70px;
   }
-
-  @media (min-width: 810px) and (max-width: 1367px) {
-    /* flex-direction: column; */
-  }
 `;
-
-const Container = styled.div`
-display: flex;
-margin: auto;
-width: 33vw;
-margin-top: 5vw;
-flex-direction: column;
-background-color: white;
-`
 
 export default class App extends React.Component {
   state = {
@@ -83,24 +71,23 @@ export default class App extends React.Component {
         value: 70.0,
         imageUrl: "https://picsum.photos/203/200",
       },
+      {
+        id: 8,
+        name: "item H",
+        value: 80.0,
+        imageUrl: "https://picsum.photos/201/201",
+      },
     ],
     cart: [],
     totalValue: "",
     selectedOrder: "",
     isCartVisible: false,
+    isFilterVisible: false,
     filterData: {
       minValue: -Infinity,
       maxValue: Infinity,
       searchName: "",
     },
-    
-    ShopMode: false,
-    inputName: "",
-    inputPrice: "",
-    inputImage: "",
-    inputId:"",
-    nameValue: ""
-    
   };
 
   // LOCAL STORAGE ------------------------------------------
@@ -114,6 +101,10 @@ export default class App extends React.Component {
   }
 
   // ABRIR COMPONENTE DO CARRINHO
+  filterToggle = () => {
+    this.setState({ isFilterVisible: !this.state.isFilterVisible });
+  };
+
   cartToggle = () => {
     this.setState({ isCartVisible: !this.state.isCartVisible });
   };
@@ -180,45 +171,28 @@ export default class App extends React.Component {
     this.setState({ cart: newCart });
   };
 
-  onClickDelete = (product) => {
+  onClickDelete = (id) => {
     let newCart = [...this.state.cart];
-    const cartIndex = newCart.findIndex((item) => item.id === product.id);
+    const cartIndex = newCart.findIndex((product) => id === product.id);
     newCart.splice(cartIndex, 1);
     this.setState({ cart: newCart });
   };
 
-  // FUNÇÃO LOJISTA CLIENTE
+  onClickAddItem = (item) => {
+    let newCart = [...this.state.cart];
+    const cartIndex = newCart.findIndex((cartItem) => item.id === cartItem.id);
+    newCart[cartIndex].quantity += 1;
+    this.setState({ cart: newCart });
+  };
 
-  ChangeModeStatus = () => {
-    this.setState({ShopMode: !this.state.ShopMode})
-}
-
-  onChangeProductName = (e) => {
-    this.setState({inputName: e.target.value})
-}
-
-  onChangeProductPrice = (e) => {
-    this.setState({inputPrice: e.target.value})
-}
-
-  onChangeProductImage = (e) => {
-    this.setState({inputImage: e.target.value})
-}
-
-  onChangeProductId = (e) => {
-    this.setState({inputId: e.target.value})
-}
-
-  onClickCreateProduct = () => {
-    let newProduct = {
-      id: this.state.inputId,
-      name: this.state.inputName,
-      value: this.state.inputPrice,
-      imageUrl: this.state.inputImage
-    };
-    let newProducts = [...this.state.products, newProduct]
-    this.setState({products: newProducts})
-  }
+  onClickRemoveItem = (item) => {
+    let newCart = [...this.state.cart];
+    const cartIndex = newCart.findIndex((cartItem) => item.id === cartItem.id);
+    if(newCart[cartIndex].quantity > 1) {
+      newCart[cartIndex].quantity -= 1;
+    }
+    this.setState({ cart: newCart });
+  };
 
   // FUNÇÃO DE RENDERIZAÇÃO DO QUE FOR FILTRADO
   filterProducts = () => {
@@ -242,38 +216,20 @@ export default class App extends React.Component {
     // ORDENA O QUE FOI RENDERIZADO E RENDERIZA
     const orderedProducts = filteredProducts.sort(this.sortProducts);
 
-    // VALOR TOTAL DO Cart
+    // VALOR TOTAL DO CARRINHO
     let totalValue = 0;
     this.state.cart.map((item) => {
       totalValue += item.value * item.quantity;
     });
 
-    if(this.state.ShopMode) {
-      return (
-        <div>
-          <ProductsField
-            quantity={this.state.products.length}
-            orderType={this.orderType}
-            orderedProducts={orderedProducts}
-            ChangeModeStatus={this.ChangeModeStatus}
-            Modo={this.state.ShopMode}
-          />
-            <Container>
-                <label value={this.state.inputName} onChange={this.onChangeProductName}>Nome do Produto</label>
-                <input/>
-                <label value={this.state.inputPrice} onChange={this.onChangeProductPrice}>Preço do Produto</label>
-                <input/>
-                <label value={this.state.inputImage} onChange={this.onChangeProductImage}>Link da Imagem</label>
-                <input/>
-                <label value={this.state.inputImage} onChange={this.onChangeProductImage}>Código do Produto</label>
-                <input/>
-                <button onClick={this.onClickCreateProduct}>Criar Produto</button>
-            </Container>
-        </div>
-      );
-    } else if(!this.state.ShopMode) {
-      return (
-        <AppWrapper>
+    return (
+      <AppWrapper>
+        <img
+          className="filterIcon"
+          onClick={this.filterToggle}
+          src="data:image/svg+xml;base64,PHN2ZyBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAyNCAyNCIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTcuNSAwaC0xNS43NWMtLjk2NSAwLTEuNzUuNzg1LTEuNzUgMS43NXYxLjkyNmMwIC43MzUuMjg2IDEuNDI2LjgwNiAxLjk0NWw1LjgyOCA1LjgyNGMuMjMyLjIzMi4zNjYuNTU1LjM2Ni44ODR2Ny45MjFjMCAuMjkzLjE3LjU1OS40MzcuNjgxLjEuMDQ3LjIwNy4wNjkuMzEzLjA2OS4xNzYgMCAuMzUtLjA2Mi40ODgtLjE4MWwyLjgwMS0yLjQwMWMuNjExLS41MjMuOTYxLTEuMjg0Ljk2MS0yLjA4OHYtMy45OGMwLS4zMzcuMTM5LS42NjYuMzgyLS45bDYuMDI3LTUuODE1Yy41MzQtLjUxNS44NC0xLjIzNy44NC0xLjk3OXYtMS45MDZjLjAwMS0uOTY1LS43ODQtMS43NS0xLjc0OS0xLjc1eiIgZmlsbD0iIzRjYWY1MCIvPjxwYXRoIGQ9Im05LjYyNSAwaC03Ljg3NWMtLjk2NSAwLTEuNzUuNzg1LTEuNzUgMS43NXYxLjkyNmMwIC43MzUuMjg2IDEuNDI2LjgwNiAxLjk0NWw1LjgyOCA1LjgyNGMuMjMyLjIzMi4zNjYuNTU1LjM2Ni44ODR2Ny45MjFjMCAuMjkzLjE3LjU1OS40MzcuNjgxLjEuMDQ3LjIwNy4wNjkuMzEzLjA2OS4xNzYgMCAuMzUtLjA2Mi40ODgtLjE4MWwxLjM4Ny0xLjE4OXoiIGZpbGw9IiM0Mjk4NDYiLz48cGF0aCBkPSJtMjIuMjUgMTJoLTYuNWMtLjk2NSAwLTEuNzUuNzg1LTEuNzUgMS43NXY4LjVjMCAuOTY1Ljc4NSAxLjc1IDEuNzUgMS43NWg2LjVjLjk2NSAwIDEuNzUtLjc4NSAxLjc1LTEuNzV2LTguNWMwLS45NjUtLjc4NS0xLjc1LTEuNzUtMS43NXoiIGZpbGw9IiNlY2VmZjEiLz48cGF0aCBkPSJtMjAuMjUgMTcuNWgtMi41Yy0uNDE0IDAtLjc1LS4zMzYtLjc1LS43NXMuMzM2LS43NS43NS0uNzVoMi41Yy40MTQgMCAuNzUuMzM2Ljc1Ljc1cy0uMzM2Ljc1LS43NS43NXoiIGZpbGw9IiM5MGE0YWUiLz48cGF0aCBkPSJtMjAuMjUgMjAuNWgtMi41Yy0uNDE0IDAtLjc1LS4zMzYtLjc1LS43NXMuMzM2LS43NS43NS0uNzVoMi41Yy40MTQgMCAuNzUuMzM2Ljc1Ljc1cy0uMzM2Ljc1LS43NS43NXoiIGZpbGw9IiM5MGE0YWUiLz48cGF0aCBkPSJtMTkgMTJoLTMuMjVjLS45NjUgMC0xLjc1Ljc4NS0xLjc1IDEuNzV2OC41YzAgLjk2NS43ODUgMS43NSAxLjc1IDEuNzVoMy4yNXYtMy41aC0xLjI1Yy0uNDE0IDAtLjc1LS4zMzYtLjc1LS43NXMuMzM2LS43NS43NS0uNzVoMS4yNXYtMS41aC0xLjI1Yy0uNDE0IDAtLjc1LS4zMzYtLjc1LS43NXMuMzM2LS43NS43NS0uNzVoMS4yNXoiIGZpbGw9IiNjZGQwZDIiLz48ZyBmaWxsPSIjN2Q4Zjk3Ij48cGF0aCBkPSJtMTkgMTZoLTEuMjVjLS40MTQgMC0uNzUuMzM2LS43NS43NXMuMzM2Ljc1Ljc1Ljc1aDEuMjV6Ii8+PHBhdGggZD0ibTE5IDE5aC0xLjI1Yy0uNDE0IDAtLjc1LjMzNi0uNzUuNzVzLjMzNi43NS43NS43NWgxLjI1eiIvPjwvZz48L3N2Zz4="
+        />
+        {this.state.isFilterVisible && (
           <Filter
             changeSearchName={this.changeSearchName}
             minValue={this.minValue}
@@ -282,25 +238,24 @@ export default class App extends React.Component {
             maxFilterValue={this.state.filterData.maxValue}
             cleanFilter={this.cleanFilter}
           />
-          <ProductsField
-            quantity={this.state.products.length}
-            orderType={this.orderType}
-            orderedProducts={orderedProducts}
-            addToCart={this.addToCart}
-            ChangeModeStatus={this.ChangeModeStatus}
-            Modo={this.state.ShopMode}
+        )}
+        <ProductsField
+          quantity={this.state.products.length}
+          orderType={this.orderType}
+          orderedProducts={orderedProducts}
+          addToCart={this.addToCart}
+        />
+        {this.state.isCartVisible && (
+          <Cart
+            cart={this.state.cart}
+            onClickAddItem={this.onClickAddItem}
+            onClickRemoveItem={this.onClickRemoveItem}
+            onClickDelete={this.onClickDelete}
+            totalValue={totalValue}
           />
-          {this.state.isCartVisible && (
-            <Cart
-              cart={this.state.cart}
-              onClickDelete={this.onClickDelete}
-              totalValue={totalValue}
-            />
-          )}
-          <img className="cartIcon" src={cartIcon} onClick={this.cartToggle} />
-        </AppWrapper>
-      )
-    }
-    
+        )}
+        <img className="cartIcon" src={cartIcon} onClick={this.cartToggle} />
+      </AppWrapper>
+    );
   }
 }
