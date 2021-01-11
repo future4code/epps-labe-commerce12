@@ -1,4 +1,4 @@
-Surge link do projeto: http://embarrassed-produce.surge.sh/
+Surge link do projeto: http://typical-connection.surge.sh/
 
 Funcionalidades:
 - Filtro retrátil de valores e nome do produto
