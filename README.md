@@ -1,4 +1,4 @@
-Surge link do projeto: http://plucky-things.surge.sh/
+Surge link do projeto: http://tall-wire.surge.sh/
 
 Funcionalidades:
 - Filtro retrátil de valores e nome do produto
