@@ -233,7 +233,7 @@ export default class App extends React.Component {
         imageUrl: inputImage,
       };
       newProducts.push(newItem);
-      this.setState({ products: newProducts });
+      this.setState({ products: newProducts, inputName:"", inputValue:"", inputImage:"" });
     } else {
       alert("Preencha os dados do produto.")
     }
