@@ -205,7 +205,6 @@ export default class App extends React.Component {
   };
 
   // FUNÇÃO LOJISTA CLIENTE
-
   ChangeModeStatus = () => {
     this.setState({ ShopMode: !this.state.ShopMode });
   };
@@ -324,6 +323,8 @@ export default class App extends React.Component {
             <Cart
               cart={this.state.cart}
               onClickDelete={this.onClickDelete}
+              onClickAddItem={this.onClickAddItem}
+              onClickRemoveItem={this.onClickRemoveItem}
               totalValue={totalValue}
             />
           )}
