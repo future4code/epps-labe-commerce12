@@ -1,4 +1,4 @@
-Surge link do projeto: http://boundless-bear.surge.sh/
+Surge link do projeto: http://plucky-things.surge.sh/
 
 Funcionalidades:
 - Filtro retrátil de valores e nome do produto
@@ -6,3 +6,4 @@ Funcionalidades:
 - Ordenamento de produtos de forma crescente ou decrescente
 - Responsividade completa
 - Estilização concluída
+- Modo lojista criado para adicionar novos produtos
