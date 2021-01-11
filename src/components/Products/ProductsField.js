@@ -43,7 +43,7 @@ export const ProductsField = (props) => {
                 key={product.id}
                 imageUrl={product.imageUrl}
                 name={product.name}
-                value={product.value}
+                value={Number(product.value).toFixed(2)}
                 id={product.id}
                 addToCart={() => props.addToCart(product)}
               />
