@@ -224,18 +224,29 @@ export default class App extends React.Component {
 
   addProduct = () => {
     const { products, inputName, inputValue, inputImage } = this.state;
-    if(inputName.length > 0 && inputValue.length > 0) {
-      const newProducts = [...products];
-      const newItem = {
-        id: Date.now(),
-        name: inputName,
-        value: inputValue,
-        imageUrl: inputImage,
-      };
-      newProducts.push(newItem);
-      this.setState({ products: newProducts, inputName:"", inputValue:"", inputImage:"" });
+    const productIndex = this.state.products.findIndex((item) => item.name === inputName);
+    console.log(productIndex)
+    if(productIndex > 0) {
+      alert("Este produto já existe")
     } else {
-      alert("Preencha os dados do produto.")
+      if (inputName.length > 0 && inputValue.length > 0) {
+        const newProducts = [...products];
+        const newItem = {
+          id: Date.now(),
+          name: inputName,
+          value: inputValue,
+          imageUrl: inputImage,
+        };
+        newProducts.push(newItem);
+        this.setState({
+          products: newProducts,
+          inputName: "",
+          inputValue: "",
+          inputImage: "",
+        });
+      } else {
+        alert("Preencha os dados do produto.");
+      }
     }
   };
 
