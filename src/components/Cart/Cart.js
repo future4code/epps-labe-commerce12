@@ -5,11 +5,16 @@ import bgCart from "../../imgs/bg-cart.png";
 const CartContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 20vw;
-  min-width: 150px;
+  width: 10vw;
+  min-width: 200px;
   border: 1px solid black;
   padding: 10px;
+  background-color: #ffffff;
   background-image: url(${bgCart});
+  position: absolute;
+  right: 10px;
+  top: 55px;
+  border-radius: 15px;
 
   h3 {
     margin-bottom: 10px;
@@ -26,7 +31,18 @@ const CartItem = styled.div`
   display: flex;
   justify-content: space-between;
 
-  button {
+  .changeQuantityBtn {
+    width: 15px;
+    background-color: #000000;
+    color: #ffffff;
+    outline: none;
+    border: 2px solid grey;
+    margin: 0 6px;
+  }
+`;
+
+const DeleteBtn = styled.button`
+   {
     padding: 3px;
     background-color: #ffffff;
     border: none;
@@ -35,16 +51,30 @@ const CartItem = styled.div`
   }
 `;
 
-export function Cart(props) {
+export const Cart = (props) => {
   let name = props.cart.map((item) => {
     return (
-      <CartItem>
-          <p>
-            {item.quantity}x {item.name}
-          </p>
-        <button onClick={() => props.onClickDelete(item.id)} className="elimina">
+      <CartItem key={item.id}>
+        <p>
+          <button
+            className="changeQuantityBtn"
+            onClick={() => props.onClickAddItem(item)}
+          >
+            +
+          </button>
+          {item.quantity}
+          <button
+            className="changeQuantityBtn"
+            onClick={() => props.onClickRemoveItem(item)}
+          >
+            -
+          </button>
+          {" "}
+          {item.name}
+        </p>
+        <DeleteBtn onClick={() => props.onClickDelete(item)}>
           [ X ]
-        </button>
+        </DeleteBtn>
       </CartItem>
     );
   });
@@ -56,4 +86,4 @@ export function Cart(props) {
       <p>Total: R${props.totalValue.toFixed(2)}</p>
     </CartContainer>
   );
-}
+};

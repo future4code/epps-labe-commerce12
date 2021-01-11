@@ -5,7 +5,7 @@ const ProductBox = styled.section`
   display: flex;
   flex-direction: column;
   height: fit-content;
-  width: 200px;
+  width: 250px;
   background-color: rgb(150, 200, 190);
   border-radius: 5px;
 
