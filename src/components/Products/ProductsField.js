@@ -15,7 +15,6 @@ const MainContainer = styled.section`
 
 const ProductContainer = styled.section`
   display: grid;
-  /* grid-template-columns: repeat(4, 1fr); */
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   height: 100%;
   gap: 30px;
@@ -28,23 +27,41 @@ const ProductContainer = styled.section`
 `;
 
 export const ProductsField = (props) => {
-  return (
-    <MainContainer>
-      <HeaderField quantity={props.quantity} orderType={props.orderType} />
-      <ProductContainer>
-        {props.orderedProducts.map((product) => {
-          return (
-            <ProductItem
-              key={product.id}
-              imageUrl={product.imageUrl}
-              name={product.name}
-              value={product.value}
-              id={product.id}
-              addToCart={() => props.addToCart(product)}
-            />
-          );
-        })}
-      </ProductContainer>
-    </MainContainer>
-  );
-}
+  if (!props.Modo) {
+    return (
+      <MainContainer>
+        <HeaderField
+          Modo={props.Modo}
+          ChangeModeStatus={props.ChangeModeStatus}
+          quantity={props.quantity}
+          orderType={props.orderType}
+        />
+        <ProductContainer>
+          {props.orderedProducts.map((product) => {
+            return (
+              <ProductItem
+                key={product.id}
+                imageUrl={product.imageUrl}
+                name={product.name}
+                value={product.value}
+                id={product.id}
+                addToCart={() => props.addToCart(product)}
+              />
+            );
+          })}
+        </ProductContainer>
+      </MainContainer>
+    );
+  } else {
+    return (
+      <MainContainer>
+        <HeaderField
+          Modo={props.Modo}
+          ChangeModeStatus={props.ChangeModeStatus}
+          quantity={props.quantity}
+          orderType={props.orderType}
+        />
+      </MainContainer>
+    );
+  }
+};

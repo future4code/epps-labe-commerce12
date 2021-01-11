@@ -4,13 +4,15 @@ import styled from "styled-components";
 const ProductBox = styled.section`
   display: flex;
   flex-direction: column;
-  height: fit-content;
+  justify-content: space-between;
   width: 250px;
   background-color: rgb(150, 200, 190);
   border-radius: 5px;
 
   img {
     border-radius: 5px 5px 0 0;
+    width: 250px;;
+    height: 250px;
   }
 
   p {
@@ -40,7 +42,7 @@ export const ProductItem = (props) => {
         <img src={props.imageUrl} alt="" />
         <p className="product-name">{props.name}</p>
         <p>
-          <b>R$</b> {props.value.toFixed(2)}
+          <b>R$</b> {props.value}
         </p>
         <button onClick={props.addToCart}>Adicionar ao carrinho</button>
       </ProductBox>
