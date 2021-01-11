@@ -29,6 +29,15 @@ const AppWrapper = styled.main`
   }
 `;
 
+const Container = styled.div`
+display: flex;
+margin: auto;
+width: 33vw;
+margin-top: 5vw;
+flex-direction: column;
+background-color: white;
+`
+
 export default class App extends React.Component {
   state = {
     products: [
@@ -74,12 +83,6 @@ export default class App extends React.Component {
         value: 70.0,
         imageUrl: "https://picsum.photos/203/200",
       },
-      {
-        id: 8,
-        name: "item H",
-        value: 80.0,
-        imageUrl: "https://picsum.photos/201/201",
-      },
     ],
     cart: [],
     totalValue: "",
@@ -90,6 +93,14 @@ export default class App extends React.Component {
       maxValue: Infinity,
       searchName: "",
     },
+    
+    ShopMode: false,
+    inputName: "",
+    inputPrice: "",
+    inputImage: "",
+    inputId:"",
+    nameValue: ""
+    
   };
 
   // LOCAL STORAGE ------------------------------------------
@@ -176,6 +187,39 @@ export default class App extends React.Component {
     this.setState({ cart: newCart });
   };
 
+  // FUNÇÃO LOJISTA CLIENTE
+
+  ChangeModeStatus = () => {
+    this.setState({ShopMode: !this.state.ShopMode})
+}
+
+  onChangeProductName = (e) => {
+    this.setState({inputName: e.target.value})
+}
+
+  onChangeProductPrice = (e) => {
+    this.setState({inputPrice: e.target.value})
+}
+
+  onChangeProductImage = (e) => {
+    this.setState({inputImage: e.target.value})
+}
+
+  onChangeProductId = (e) => {
+    this.setState({inputId: e.target.value})
+}
+
+  onClickCreateProduct = () => {
+    let newProduct = {
+      id: this.state.inputId,
+      name: this.state.inputName,
+      value: this.state.inputPrice,
+      imageUrl: this.state.inputImage
+    };
+    let newProducts = [...this.state.products, newProduct]
+    this.setState({products: newProducts})
+  }
+
   // FUNÇÃO DE RENDERIZAÇÃO DO QUE FOR FILTRADO
   filterProducts = () => {
     const { products } = this.state;
@@ -204,31 +248,59 @@ export default class App extends React.Component {
       totalValue += item.value * item.quantity;
     });
 
-    return (
-      <AppWrapper>
-        <Filter
-          changeSearchName={this.changeSearchName}
-          minValue={this.minValue}
-          maxValue={this.maxValue}
-          minFilterValue={this.state.filterData.minValue}
-          maxFilterValue={this.state.filterData.maxValue}
-          cleanFilter={this.cleanFilter}
-        />
-        <ProductsField
-          quantity={this.state.products.length}
-          orderType={this.orderType}
-          orderedProducts={orderedProducts}
-          addToCart={this.addToCart}
-        />
-        {this.state.isCartVisible && (
-          <Cart
-            cart={this.state.cart}
-            onClickDelete={this.onClickDelete}
-            totalValue={totalValue}
+    if(this.state.ShopMode) {
+      return (
+        <div>
+          <ProductsField
+            quantity={this.state.products.length}
+            orderType={this.orderType}
+            orderedProducts={orderedProducts}
+            ChangeModeStatus={this.ChangeModeStatus}
+            Modo={this.state.ShopMode}
           />
-        )}
-        <img className="cartIcon" src={cartIcon} onClick={this.cartToggle} />
-      </AppWrapper>
-    );
+            <Container>
+                <label value={this.state.inputName} onChange={this.onChangeProductName}>Nome do Produto</label>
+                <input/>
+                <label value={this.state.inputPrice} onChange={this.onChangeProductPrice}>Preço do Produto</label>
+                <input/>
+                <label value={this.state.inputImage} onChange={this.onChangeProductImage}>Link da Imagem</label>
+                <input/>
+                <label value={this.state.inputImage} onChange={this.onChangeProductImage}>Código do Produto</label>
+                <input/>
+                <button onClick={this.onClickCreateProduct}>Criar Produto</button>
+            </Container>
+        </div>
+      );
+    } else if(!this.state.ShopMode) {
+      return (
+        <AppWrapper>
+          <Filter
+            changeSearchName={this.changeSearchName}
+            minValue={this.minValue}
+            maxValue={this.maxValue}
+            minFilterValue={this.state.filterData.minValue}
+            maxFilterValue={this.state.filterData.maxValue}
+            cleanFilter={this.cleanFilter}
+          />
+          <ProductsField
+            quantity={this.state.products.length}
+            orderType={this.orderType}
+            orderedProducts={orderedProducts}
+            addToCart={this.addToCart}
+            ChangeModeStatus={this.ChangeModeStatus}
+            Modo={this.state.ShopMode}
+          />
+          {this.state.isCartVisible && (
+            <Cart
+              cart={this.state.cart}
+              onClickDelete={this.onClickDelete}
+              totalValue={totalValue}
+            />
+          )}
+          <img className="cartIcon" src={cartIcon} onClick={this.cartToggle} />
+        </AppWrapper>
+      )
+    }
+    
   }
 }
